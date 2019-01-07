@@ -23,7 +23,12 @@
   },
   "homepage": "https://github.com/TedChenNZ/dice-roller#readme",
   "devDependencies": {
+    "@types/react": "^16.7.17",
     "parcel-bundler": "^1.10.3",
     "typescript": "^3.2.2"
+  },
+  "dependencies": {
+    "react": "16.7.0-alpha.2",
+    "react-dom": "16.7.0-alpha.2"
   }
 }

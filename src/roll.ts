@@ -1,26 +1,30 @@
 
-export function roll(input: string, average = false) {
+export default function roll(input: string, average = false) {
   // Based on https://rgxdb.com/r/QB4A72T
   const diceRollRegex = /(?:(\d+)\s*X\s*)?(\d*)D(\d*)\s*([+-]\s*[LH])?\s*([+\/*-]\s*\d+)?/i;
   const regexResult = input.match(diceRollRegex);
+  if (!regexResult) {
+    return [];
+  }
   let [, rollCount, diceCount, sides, highestLowest, modifier] = regexResult;
-
+  console.log(rollCount, diceCount, sides, highestLowest, modifier);
   const getResult = () => {
     let result = 0;
-    let diceRollResults = rollDice(stringToInt(diceCount), stringToInt(sides), average);
-    if (highestLowest && diceRollResults.length) {
-      diceRollResults.sort();
+    const originalRolls = rollDice(stringToInt(diceCount), stringToInt(sides), average);
+    let rolls = [...originalRolls];
+    if (highestLowest && rolls.length) {
+      rolls.sort();
       if (isAddition(highestLowest)) {
         // This means we only take the highest or lowest result
         if (highestLowest.toLowerCase().includes('l')) {
-          diceRollResults = diceRollResults[0];
+          rolls.splice(0, 1);
         } else {
-          diceRollResults = diceRollResults[diceRollResults.length - 1];
+          rolls.splice(rolls.length - 1, 1);
         }
       }
     }
     const sum = (accumulator, current) => accumulator + current;
-    result = diceRollResults.reduce(sum);
+    result = rolls.reduce(sum);
 
     if (modifier) {
       const modifierNumber = getNumber(modifier);
@@ -32,7 +36,10 @@ export function roll(input: string, average = false) {
         }
       }
     }
-    return result;
+    return {
+      result,
+      originalRolls,
+    };
   }
   const results = [];
   const rolls = stringToInt(rollCount) || 1;
@@ -43,7 +50,7 @@ export function roll(input: string, average = false) {
   return results;
 }
 
-function rollDice(diceCount: number, sides: number, average = false) {
+function rollDice(diceCount?: number, sides?: number, average = false) {
   const diceRolls = [];
   if (diceCount && sides) {
     for (let i = 0; i < diceCount; i++) {
@@ -58,7 +65,7 @@ function rollDice(diceCount: number, sides: number, average = false) {
   return [];
 }
 
-function stringToInt(string: string) {
+function stringToInt(string?: string) {
   return string ? parseInt(string, 10) : null;
 }
 
