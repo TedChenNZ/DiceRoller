@@ -1,0 +1,45 @@
+.originalRolls {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+  & > * {
+    margin-left: 2rem;
+  }
+
+  & > *:first-child {
+    margin-left: 0;
+  }
+}
+
+.modifier {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  margin-top: 2rem;
+}
+
+.result {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  span {
+    font-size: 1rem;
+    position: absolute;
+    margin-left: -5rem;
+  }
+
+  h3 {
+    font-weight: 700;
+    font-size: 2rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border-bottom: solid 3px #41403e;
+  }
+}

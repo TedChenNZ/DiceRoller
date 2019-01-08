@@ -1,0 +1,65 @@
+@import url('https://fonts.googleapis.com/css?family=Gloria+Hallelujah');
+
+body {
+  font-family: 'Gloria Hallelujah', cursive;
+  color: #41403e;
+}
+
+input,
+button {
+  font-family: 'Gloria Hallelujah', cursive;
+  font-weight: 700;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 1200px;
+}
+
+.title {
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 4rem;
+  font-weight: 200;
+}
+
+.input {
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  button {
+    background: none;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+    border: solid 3px #41403e;
+    margin-top: 0.5rem;
+    background: #41403e;
+    color: white;
+  }
+}
+
+.box {
+  align-self: center;
+  background: transparent;
+  padding: 0.5rem;
+  margin: 0 1rem;
+  transition: all .5s ease;
+  font-size: 1.5rem;
+  letter-spacing: 1px;
+  text-align: center;
+  outline: none;
+  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  border: solid 3px #41403e;
+
+  & input {
+    width: 12rem;
+  }
+}

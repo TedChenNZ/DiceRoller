@@ -1,4 +1,14 @@
 
+export type RollResult = {
+  result: number,
+  originalRolls: number[],
+  rollCount: number,
+  diceCount: number,
+  sides: number,
+  highestLowest: string,
+  modifier: string,
+  input: string,
+}
 export default function roll(input: string, average = false) {
   // Based on https://rgxdb.com/r/QB4A72T
   const diceRollRegex = /(?:(\d+)\s*X\s*)?(\d*)D(\d*)\s*([+-]\s*[LH])?\s*([+\/*-]\s*\d+)?/i;
@@ -23,7 +33,7 @@ export default function roll(input: string, average = false) {
         }
       }
     }
-    const sum = (accumulator, current) => accumulator + current;
+    const sum = (accumulator: number, current: number) => accumulator + current;
     result = rolls.reduce(sum);
 
     if (modifier) {
@@ -39,10 +49,17 @@ export default function roll(input: string, average = false) {
     return {
       result,
       originalRolls,
-    };
+      rollCount: stringToInt(rollCount),
+      diceCount: stringToInt(diceCount),
+      sides: stringToInt(sides),
+      highestLowest,
+      modifier,
+      input
+    } as RollResult;
   }
-  const results = [];
-  const rolls = stringToInt(rollCount) || 1;
+  const results: RollResult[] = [];
+  // const rolls = stringToInt(rollCount) || 1;
+  const rolls = 1;
   for (let i = 0; i < rolls; i++) {
     results.push(getResult());
   }
@@ -51,7 +68,7 @@ export default function roll(input: string, average = false) {
 }
 
 function rollDice(diceCount?: number, sides?: number, average = false) {
-  const diceRolls = [];
+  const diceRolls: number[] = [];
   if (diceCount && sides) {
     for (let i = 0; i < diceCount; i++) {
       if (average) {
@@ -66,7 +83,7 @@ function rollDice(diceCount?: number, sides?: number, average = false) {
 }
 
 function stringToInt(string?: string) {
-  return string ? parseInt(string, 10) : null;
+  return string ? parseInt(string, 10) : undefined;
 }
 
 function isAddition(string: string) {

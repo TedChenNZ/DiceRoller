@@ -24,7 +24,10 @@
   "homepage": "https://github.com/TedChenNZ/dice-roller#readme",
   "devDependencies": {
     "@types/react": "^16.7.17",
+    "autoprefixer": "^9.4.4",
     "parcel-bundler": "^1.10.3",
+    "postcss-modules": "^1.4.1",
+    "sass": "^1.15.3",
     "typescript": "^3.2.2"
   },
   "dependencies": {
