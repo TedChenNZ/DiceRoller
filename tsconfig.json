@@ -7,7 +7,7 @@
     "jsx": "react",
     "rootDir": "./src",
     "experimentalDecorators": true,
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "lib": [
       "dom",
       "es2015"

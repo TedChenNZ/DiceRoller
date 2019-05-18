@@ -1,5 +1,5 @@
 import React from 'react';
-import { RollResult } from '../roll';
+import { RollResult } from '../../roll';
 import styles from './results.scss';
 
 const Results = ({ rollResult }: { rollResult?: RollResult[] }) => {

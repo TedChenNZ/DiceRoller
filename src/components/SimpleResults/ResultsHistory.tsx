@@ -1,5 +1,5 @@
 import React from 'react';
-import roll, { RollResult } from '../roll';
+import { RollResult } from '../../roll';
 
 const ResultsHistory = ({ history }: { history?: RollResult[][] }) => {
   if (history && history.length) {
