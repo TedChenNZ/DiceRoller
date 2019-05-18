@@ -14,10 +14,31 @@ const onComponentMount = (onMount: () => void) => {
   }
 };
 
+const onHrefChange = (onChange: (newUrl) => void, initialHref?: string) => {
+  const [href, setHref] = useState(initialHref);
+  const currentHref = window.location.href;
+  if (currentHref !== href) {
+    onChange(currentHref);
+  }
+  setHref(currentHref);
+};
+
+function getMobDamageResult() {
+  const { mobDamageResult: mobDamageResultBase64 } = queryString.parse(
+    location.search
+  );
+  try {
+    if (mobDamageResultBase64) {
+      return JSON.parse(atob(mobDamageResultBase64));
+    }
+  } catch {}
+  return null;
+}
+
 const App = () => {
   const [defaultValues, setDefaultValues] = useState({});
   const [history, setHistory] = useState([] as IMobDamageResult[]);
-  onComponentMount(() => {
+  const updateStateFromQueryString = () => {
     const {
       mobDamageResult: mobDamageResultBase64,
       ...defaults
@@ -33,7 +54,10 @@ const App = () => {
       ? [mobDamageResult, ...history]
       : history;
     setHistory(newHistory);
-  });
+  };
+
+  onComponentMount(updateStateFromQueryString);
+  window.onpopstate = updateStateFromQueryString;
 
   const onSubmit = (e: any) => {
     const formElement: HTMLFormElement = e.target.form;

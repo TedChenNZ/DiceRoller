@@ -73,6 +73,9 @@ export function rollMobDamageResults({
       damage: attackRoll.hit ? damageRoll.sum : 0
     };
   };
+  if (mobSize > 500) {
+    throw new Error("Mob size cannot be over 500");
+  }
   const minionResults: IMinionRoll[] = [];
   for (let i = 0; i < mobSize; i++) {
     minionResults.push(calculateMinionRoll());

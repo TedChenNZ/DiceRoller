@@ -45,6 +45,7 @@ const MobRollerForm = ({
         type="number"
         defaultValue={defaults.mobSize}
         required
+        max="100"
         autoFocus
       />
       <TextInput
