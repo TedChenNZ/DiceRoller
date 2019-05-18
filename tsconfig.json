@@ -7,13 +7,8 @@
     "jsx": "react",
     "rootDir": "./src",
     "experimentalDecorators": true,
-    "noImplicitAny": true,
-    "lib": [
-      "dom",
-      "es2015"
-    ]
+    "noImplicitAny": false,
+    "lib": ["dom", "es2015"]
   },
-  "include": [
-    "./src/**/*"
-  ]
+  "include": ["./src/**/*"]
 }
