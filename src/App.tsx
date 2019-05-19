@@ -35,7 +35,8 @@ const App = () => {
       }
     } catch {}
     const newHistory = mobDamageResult
-      ? [mobDamageResult, ...history]
+      ? // ? [mobDamageResult, ...history]
+        [mobDamageResult]
       : history;
     setHistory(newHistory);
   };
@@ -47,18 +48,17 @@ const App = () => {
     const mobDamageResult = rollMobDamageResults(inputs);
     setHistory([mobDamageResult, ...history]);
     const url = queryString.parseUrl(location.href).url;
-    const encodedMobDamageResult = btoa(JSON.stringify(mobDamageResult));
-    window.history.pushState(
-      inputs,
-      document.title,
-      `${url}?${queryString.stringify({
-        ...inputs
-        // mobDamageResult:
-        //   encodedMobDamageResult.length >= 2000
-        //     ? undefined
-        //     : encodedMobDamageResult
-      })}`
-    );
+    // const encodedMobDamageResult = btoa(JSON.stringify(mobDamageResult));
+    const newHref = `${url}?${queryString.stringify({
+      ...inputs
+      // mobDamageResult:
+      //   encodedMobDamageResult.length >= 2000
+      //     ? undefined
+      //     : encodedMobDamageResult
+    })}`;
+    if (location.href !== newHref) {
+      window.history.pushState(inputs, document.title, newHref);
+    }
   };
 
   const Link = styled.a`
@@ -108,9 +108,5 @@ const Container = styled.div`
 
   @media (min-width: 576px) {
     max-width: 576px;
-
-    h1 {
-      font-size: 5rem;
-    }
   }
 `;
