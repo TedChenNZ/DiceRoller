@@ -52,20 +52,32 @@ const App = () => {
       inputs,
       document.title,
       `${url}?${queryString.stringify({
-        ...inputs,
-        mobDamageResult:
-          encodedMobDamageResult.length > 100000
-            ? undefined
-            : encodedMobDamageResult
+        ...inputs
+        // mobDamageResult:
+        //   encodedMobDamageResult.length >= 2000
+        //     ? undefined
+        //     : encodedMobDamageResult
       })}`
     );
   };
+
+  const Link = styled.a`
+    color: #212529;
+    text-decoration: none;
+
+    &:hover {
+      color: #adafbc;
+      text-decoration: none;
+    }
+  `;
 
   const mobResult = history && history.length ? history[0] : undefined;
   return (
     <AppWrapper>
       <Container>
-        <h1>D&amp;D Mob Roller</h1>
+        <Link href="/">
+          <h1>D&amp;D Mob Roller</h1>
+        </Link>
         <div>
           <MobRollerForm defaultValues={defaultValues} onSubmit={onSubmit} />
           <MobResult mobResult={mobResult} />

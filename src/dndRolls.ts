@@ -17,6 +17,7 @@ export interface IMobDamageInput {
   advantage: boolean;
   disadvantage: boolean;
   average?: boolean;
+  mobName?: string;
 }
 
 export interface IMobDamageResult {
@@ -91,13 +92,23 @@ export function rollMobDamageResults({
 }
 
 export function convertMobDamageInputTypes(input) {
+  const {
+    mobSize,
+    toHitMod,
+    damageDice,
+    ac,
+    advantage,
+    disadvantage,
+    ...rest
+  } = input;
   return {
-    mobSize: parseInt(input.mobSize, 10),
-    toHitMod: parseInt(input.toHitMod, 10),
-    damageDice: input.damageDice,
-    ac: parseInt(input.ac, 10),
-    advantage: parseBoolean(input.advantage),
-    disadvantage: parseBoolean(input.disadvantage)
+    mobSize: parseInt(mobSize, 10),
+    toHitMod: parseInt(toHitMod, 10),
+    damageDice: damageDice,
+    ac: parseInt(ac, 10),
+    advantage: parseBoolean(advantage),
+    disadvantage: parseBoolean(disadvantage),
+    ...rest
   };
 }
 

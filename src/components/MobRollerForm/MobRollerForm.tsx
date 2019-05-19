@@ -29,7 +29,8 @@ const MobRollerForm = ({
     damageDice: defaultValues.damageDice || defaultDefaultValues.damageDice,
     ac: defaultValues.ac || defaultDefaultValues.ac,
     advantage: defaultValues.advantage,
-    disadvantage: defaultValues.disadvantage
+    disadvantage: defaultValues.disadvantage,
+    mobName: ""
   };
 
   const onFormSubmit = e => {
@@ -50,6 +51,13 @@ const MobRollerForm = ({
   };
   return (
     <Form onSubmit={onFormSubmit}>
+      <TextInput
+        label="Mob Name"
+        name="mobName"
+        type="text"
+        defaultValue={defaults.mobName}
+        autoFocus
+      />
       <TextInput
         label="Mob Size"
         name="mobSize"
