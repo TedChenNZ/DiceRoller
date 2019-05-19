@@ -89,3 +89,21 @@ export function rollMobDamageResults({
       .reduce((prev, curr) => prev + curr, 0)
   };
 }
+
+export function convertMobDamageInputTypes(input) {
+  return {
+    mobSize: parseInt(input.mobSize, 10),
+    toHitMod: parseInt(input.toHitMod, 10),
+    damageDice: input.damageDice,
+    ac: parseInt(input.ac, 10),
+    advantage: parseBoolean(input.advantage),
+    disadvantage: parseBoolean(input.disadvantage)
+  };
+}
+
+export function parseBoolean(input?: string | boolean) {
+  if (typeof input === "boolean") {
+    return input;
+  }
+  return input === "true" || input === "on";
+}

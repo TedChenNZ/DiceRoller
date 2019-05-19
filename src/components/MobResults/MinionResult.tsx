@@ -1,45 +1,57 @@
 import React from "react";
 import { IMinionRoll } from "../../dndRolls";
 import styled from "styled-components";
-import monsterImage from "../../assets/icons/monster.png";
 import hitImage from "../../assets/icons/hit.png";
 import missImage from "../../assets/icons/miss.png";
 import damageImage from "../../assets/icons/damage.png";
+import { RollResult } from "../../roll";
 
-const Wrapper = styled.div`
-  padding: 0.5rem;
-  display: flex;
-  flex-direction: row;
-  img {
-    height: 1rem;
+const MinionResultWrapper = styled.tr`
+  font-size: 0.6rem;
+
+  td {
+    padding: 1em 0;
+    vertical-align: middle;
   }
-  p {
-    padding-left: 0.5rem;
+
+  img {
+    height: 1.5em;
+    padding: 0 1em;
   }
 `;
 
-const Rolls = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin-right: 0.5rem;
+const RollResult = styled.span`
+  padding-right: 1em;
 `;
 
 const MinionResult = ({ minionRoll }: { minionRoll: IMinionRoll }) => {
   const { attackRolls, damageRolls, hit, toHit, damage } = minionRoll;
   return (
-    <Wrapper style={{ opacity: hit ? 1 : 0.25 }}>
-      <Rolls style={{ width: "7rem" }}>
-        <img src={hit ? hitImage : missImage} />
-        <p>[{attackRolls.join(", ")}]</p>
-        <p>{toHit}</p>
-      </Rolls>
-      <Rolls>
-        <img src={damageImage} />
-        <p>[{damageRolls.join(", ")}]</p>
-        <p>{damage}</p>
-      </Rolls>
-    </Wrapper>
+    <MinionResultWrapper style={{ opacity: hit ? 1 : 0.25 }}>
+      <td>
+        <img
+          src={hit ? hitImage : missImage}
+          alt={hit ? "Hit" : "Miss"}
+          title={hit ? "Hit" : "Miss"}
+        />
+      </td>
+      <td>
+        <RollResult>{toHit}</RollResult>
+      </td>
+      <td>
+        <span>[{attackRolls.join(", ")}]</span>
+      </td>
+
+      <td style={{ paddingLeft: "3em" }}>
+        <img src={damageImage} alt={"Damage"} title={"Damage"} />
+      </td>
+      <td>
+        <RollResult>{damage}</RollResult>
+      </td>
+      <td>
+        <span>[{damageRolls.join(", ")}]</span>
+      </td>
+    </MinionResultWrapper>
   );
 };
 

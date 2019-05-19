@@ -1,17 +1,10 @@
 import React from "react";
-import { IMobDamageInput } from "../../dndRolls";
-
-interface ITextInput extends React.InputHTMLAttributes<HTMLInputElement> {
-  label: string;
-}
-const TextInput = ({ label, name, ...inputProps }: ITextInput) => {
-  return (
-    <React.Fragment>
-      <label htmlFor={name}>{label}</label>
-      <input id={name} name={name} {...inputProps} />
-    </React.Fragment>
-  );
-};
+import { IMobDamageInput, convertMobDamageInputTypes } from "../../dndRolls";
+import styled from "styled-components";
+import TextInput from "./TextInput";
+import CheckboxInput from "./Checkbox";
+import { Button } from "nes-react";
+import { rollDice } from "../../roll";
 
 const defaultDefaultValues = {
   mobSize: 10,
@@ -22,12 +15,13 @@ const defaultDefaultValues = {
   disadvantage: false,
   average: false
 };
+
 const MobRollerForm = ({
   defaultValues,
   onSubmit
 }: {
   defaultValues;
-  onSubmit: (e) => any;
+  onSubmit: (data: IMobDamageInput) => any;
 }) => {
   const defaults = {
     mobSize: defaultValues.mobSize || defaultDefaultValues.mobSize,
@@ -37,8 +31,25 @@ const MobRollerForm = ({
     advantage: defaultValues.advantage,
     disadvantage: defaultValues.disadvantage
   };
+
+  const onFormSubmit = e => {
+    const formElement: HTMLFormElement = e.target.form;
+    if (!formElement.checkValidity()) {
+      return;
+    }
+    const formData = new FormData(formElement);
+    const data: Partial<IMobDamageInput> = {};
+    formData.forEach((value, key) => {
+      data[key] = value;
+    });
+    data.advantage = formElement.advantage.checked;
+    data.disadvantage = formElement.disadvantage.checked;
+    e.preventDefault();
+    const inputs = convertMobDamageInputTypes(data);
+    return onSubmit(inputs);
+  };
   return (
-    <form onSubmit={onSubmit}>
+    <Form onSubmit={onFormSubmit}>
       <TextInput
         label="Mob Size"
         name="mobSize"
@@ -69,26 +80,28 @@ const MobRollerForm = ({
         defaultValue={defaults.ac}
         required
       />
-
-      <label htmlFor="advantage">Advantage</label>
-      <input
+      <CheckboxInput
         id="advantage"
-        name="advantage"
-        type="checkbox"
+        label="Advantage"
         defaultChecked={defaults.advantage}
       />
-
-      <label htmlFor="disadvantage">Disadvantage</label>
-      <input
+      <CheckboxInput
         id="disadvantage"
-        name="disadvantage"
-        type="checkbox"
+        label="Disadvantage"
         defaultChecked={defaults.disadvantage}
       />
-
-      <button onClick={onSubmit}>Roll Dice</button>
-    </form>
+      {
+        // @ts-ignore
+        <Button onClick={onFormSubmit}>Roll Dice</Button>
+      }
+    </Form>
   );
 };
 
 export default MobRollerForm;
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem;
+`;

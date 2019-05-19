@@ -5,6 +5,9 @@ import MinionResult from "./MinionResult";
 
 const Wrapper = styled.div`
   padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const MobResult = ({ mobResult }: { mobResult?: IMobDamageResult }) => {
@@ -18,11 +21,13 @@ const MobResult = ({ mobResult }: { mobResult?: IMobDamageResult }) => {
         <p>Total Hits: {totalHits}</p>
         <p>Total Damage: {totalDamage}</p>
       </Wrapper>
-      <div>
-        {minionRolls.map((minionRoll, i) => {
-          return <MinionResult key={i} minionRoll={minionRoll} />;
-        })}
-      </div>
+      <table>
+        <tbody>
+          {minionRolls.map((minionRoll, i) => {
+            return <MinionResult key={i} minionRoll={minionRoll} />;
+          })}
+        </tbody>
+      </table>
     </Wrapper>
   );
 };
