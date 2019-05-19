@@ -30,7 +30,7 @@ const MobRollerForm = ({
     ac: defaultValues.ac || defaultDefaultValues.ac,
     advantage: defaultValues.advantage,
     disadvantage: defaultValues.disadvantage,
-    mobName: ""
+    mobName: defaultValues.mobName || ""
   };
 
   const onFormSubmit = e => {
