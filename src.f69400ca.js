@@ -43295,7 +43295,11 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-function simpleRoll(input, average) {
+function simpleRoll(input, criticalSuccess, average) {
+  if (criticalSuccess === void 0) {
+    criticalSuccess = false;
+  }
+
   if (average === void 0) {
     average = false;
   }
@@ -43310,6 +43314,10 @@ function simpleRoll(input, average) {
 
   if (diceCount && sides) {
     rolls.push.apply(rolls, rollDice(diceCount, sides, average));
+
+    if (criticalSuccess) {
+      rolls.push.apply(rolls, rollDice(diceCount, sides, average));
+    }
   }
 
   var sum = rolls.reduce(function (prev, curr) {
@@ -43317,7 +43325,8 @@ function simpleRoll(input, average) {
   }, 0) + modifier;
   return {
     sum: sum,
-    rolls: rolls
+    rolls: rolls,
+    modifier: modifier
   };
 }
 
@@ -43428,7 +43437,9 @@ function rollAttack(_a) {
   return {
     attackRolls: attackRolls,
     hit: attackRoll + toHitMod >= ac,
-    toHit: attackRoll + toHitMod
+    toHit: attackRoll + toHitMod,
+    criticalSuccess: attackRoll === 20,
+    criticalFail: attackRoll === 1
   };
 }
 
@@ -43450,7 +43461,7 @@ function rollMobDamageResults(_a) {
       advantage: advantage,
       disadvantage: disadvantage
     });
-    var damageRoll = roll_1.simpleRoll(damageDice, average);
+    var damageRoll = roll_1.simpleRoll(damageDice, attackRoll.criticalSuccess, average);
     return __assign({}, attackRoll, {
       damageRolls: damageRoll.rolls,
       damage: attackRoll.hit ? damageRoll.sum : 0
@@ -47309,7 +47320,27 @@ var miss_png_1 = __importDefault(require("../../assets/icons/miss.png"));
 
 var damage_png_1 = __importDefault(require("../../assets/icons/damage.png"));
 
-var MinionResultWrapper = styled_components_1.default.tr(templateObject_1 || (templateObject_1 = __makeTemplateObject(["\n  font-size: 0.6rem;\n\n  td {\n    padding: 1em 0;\n    vertical-align: middle;\n  }\n\n  img {\n    height: 1.5em;\n    padding: 0 1em;\n  }\n"], ["\n  font-size: 0.6rem;\n\n  td {\n    padding: 1em 0;\n    vertical-align: middle;\n  }\n\n  img {\n    height: 1.5em;\n    padding: 0 1em;\n  }\n"])));
+var MinionResultWrapper = styled_components_1.default.tr.attrs(function (props) {
+  return {
+    hit: props.hit,
+    criticalSuccess: props.criticalSuccess,
+    criticalFail: props.criticalFail
+  };
+})(templateObject_1 || (templateObject_1 = __makeTemplateObject(["\n  font-size: 0.6rem;\n  opacity: ", ";\n  color: ", ";\n  font-weight: ", ";\n\n  td {\n    padding: 1em 0;\n    vertical-align: middle;\n  }\n\n  img {\n    height: 1.5em;\n    padding: 0 1em;\n  }\n"], ["\n  font-size: 0.6rem;\n  opacity: ", ";\n  color: ", ";\n  font-weight: ", ";\n\n  td {\n    padding: 1em 0;\n    vertical-align: middle;\n  }\n\n  img {\n    height: 1.5em;\n    padding: 0 1em;\n  }\n"])), function (props) {
+  return props.hit ? 1 : 0.25;
+}, function (props) {
+  if (props.criticalSuccess) {
+    return 'green';
+  }
+
+  if (props.criticalFail) {
+    return 'red';
+  }
+
+  return 'inherit';
+}, function (props) {
+  return props.criticalSuccess || props.criticalFail ? 700 : 'inherit';
+});
 var RollResult = styled_components_1.default.span(templateObject_2 || (templateObject_2 = __makeTemplateObject(["\n  padding-right: 1em;\n"], ["\n  padding-right: 1em;\n"])));
 
 var MinionResult = function MinionResult(_a) {
@@ -47318,11 +47349,13 @@ var MinionResult = function MinionResult(_a) {
       damageRolls = minionRoll.damageRolls,
       hit = minionRoll.hit,
       toHit = minionRoll.toHit,
-      damage = minionRoll.damage;
+      damage = minionRoll.damage,
+      criticalSuccess = minionRoll.criticalSuccess,
+      criticalFail = minionRoll.criticalFail;
   return react_1.default.createElement(MinionResultWrapper, {
-    style: {
-      opacity: hit ? 1 : 0.25
-    }
+    hit: hit,
+    criticalSuccess: criticalSuccess,
+    criticalFail: criticalFail
   }, react_1.default.createElement("td", null, react_1.default.createElement("img", {
     src: hit ? hit_png_1.default : miss_png_1.default,
     alt: hit ? "Hit" : "Miss",
@@ -48574,7 +48607,6 @@ var App = function App() {
     }
   };
 
-  var Link = styled_components_1.default.a(templateObject_1 || (templateObject_1 = __makeTemplateObject(["\n    color: #212529;\n    text-decoration: none;\n\n    &:hover {\n      color: #adafbc;\n      text-decoration: none;\n    }\n  "], ["\n    color: #212529;\n    text-decoration: none;\n\n    &:hover {\n      color: #adafbc;\n      text-decoration: none;\n    }\n  "])));
   var mobResult = history && history.length ? history[0] : undefined;
   return react_1.default.createElement(AppWrapper, null, react_1.default.createElement(Container, null, react_1.default.createElement(Link, {
     href: "/"
@@ -48587,8 +48619,9 @@ var App = function App() {
 };
 
 exports.default = App;
-var AppWrapper = styled_components_1.default.div(templateObject_2 || (templateObject_2 = __makeTemplateObject(["\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n"], ["\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n"])));
-var Container = styled_components_1.default.div(templateObject_3 || (templateObject_3 = __makeTemplateObject(["\n  width: 100%;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n\n  h1 {\n    font-size: 3rem;\n    text-align: center;\n  }\n\n  @media (min-width: 576px) {\n    max-width: 576px;\n  }\n"], ["\n  width: 100%;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n\n  h1 {\n    font-size: 3rem;\n    text-align: center;\n  }\n\n  @media (min-width: 576px) {\n    max-width: 576px;\n  }\n"])));
+var AppWrapper = styled_components_1.default.div(templateObject_1 || (templateObject_1 = __makeTemplateObject(["\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n"], ["\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n"])));
+var Container = styled_components_1.default.div(templateObject_2 || (templateObject_2 = __makeTemplateObject(["\n  width: 100%;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n\n  h1 {\n    font-size: 3rem;\n    text-align: center;\n  }\n\n  @media (min-width: 576px) {\n    max-width: 576px;\n  }\n"], ["\n  width: 100%;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n\n  h1 {\n    font-size: 3rem;\n    text-align: center;\n  }\n\n  @media (min-width: 576px) {\n    max-width: 576px;\n  }\n"])));
+var Link = styled_components_1.default.a(templateObject_3 || (templateObject_3 = __makeTemplateObject(["\n    color: #212529;\n    text-decoration: none;\n\n    &:hover {\n      color: #adafbc;\n      text-decoration: none;\n    }\n  "], ["\n    color: #212529;\n    text-decoration: none;\n\n    &:hover {\n      color: #adafbc;\n      text-decoration: none;\n    }\n  "])));
 var templateObject_1, templateObject_2, templateObject_3;
 },{"react":"../node_modules/react/index.js","./dndRolls":"dndRolls.ts","./components/MobResults/MobResult":"components/MobResults/MobResult.tsx","./components/MobRollerForm/MobRollerForm":"components/MobRollerForm/MobRollerForm.tsx","query-string":"../node_modules/query-string/index.js","styled-components":"../node_modules/styled-components/dist/styled-components.browser.esm.js"}],"index.tsx":[function(require,module,exports) {
 "use strict";
@@ -48650,7 +48683,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50133" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61264" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
