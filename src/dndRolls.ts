@@ -46,12 +46,13 @@ export function rollAttack({
   );
 
   const attackRoll = attackRolls[rollOnce || disadvantage ? 0 : 1];
+  const criticalFail = attackRoll === 1;
   return {
     attackRolls,
-    hit: attackRoll + toHitMod >= ac,
+    hit: criticalFail ? false : (attackRoll + toHitMod >= ac),
     toHit: attackRoll + toHitMod,
     criticalSuccess: attackRoll === 20,
-    criticalFail: attackRoll === 1,
+    criticalFail,
   };
 }
 
