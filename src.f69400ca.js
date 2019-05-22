@@ -43434,12 +43434,13 @@ function rollAttack(_a) {
     return i;
   })], roll_1.rollDice(rollOnce ? 1 : 2, 20));
   var attackRoll = attackRolls[rollOnce || disadvantage ? 0 : 1];
+  var criticalFail = attackRoll === 1;
   return {
     attackRolls: attackRolls,
-    hit: attackRoll + toHitMod >= ac,
+    hit: criticalFail ? false : attackRoll + toHitMod >= ac,
     toHit: attackRoll + toHitMod,
     criticalSuccess: attackRoll === 20,
-    criticalFail: attackRoll === 1
+    criticalFail: criticalFail
   };
 }
 
@@ -48683,7 +48684,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61264" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62149" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
