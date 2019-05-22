@@ -9,16 +9,20 @@ export type RollResult = {
   input: string;
 };
 
-export function simpleRoll(input: string, average: boolean = false) {
+export function simpleRoll(input: string, criticalSuccess: boolean = false, average: boolean = false) {
   const { diceCount, sides, modifier = 0 } = parseDiceRoll(input);
   const rolls: number[] = [];
   if (diceCount && sides) {
     rolls.push(...rollDice(diceCount, sides, average));
+    if (criticalSuccess) {
+      rolls.push(...rollDice(diceCount, sides, average));
+    }
   }
   const sum = rolls.reduce((prev, curr) => prev + curr, 0) + modifier;
   return {
     sum,
-    rolls
+    rolls,
+    modifier
   };
 }
 

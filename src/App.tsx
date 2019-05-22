@@ -61,16 +61,6 @@ const App = () => {
     }
   };
 
-  const Link = styled.a`
-    color: #212529;
-    text-decoration: none;
-
-    &:hover {
-      color: #adafbc;
-      text-decoration: none;
-    }
-  `;
-
   const mobResult = history && history.length ? history[0] : undefined;
   return (
     <AppWrapper>
@@ -110,3 +100,13 @@ const Container = styled.div`
     max-width: 576px;
   }
 `;
+
+const Link = styled.a`
+    color: #212529;
+    text-decoration: none;
+
+    &:hover {
+      color: #adafbc;
+      text-decoration: none;
+    }
+  `;

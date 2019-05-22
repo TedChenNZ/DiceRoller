@@ -7,6 +7,8 @@ export interface IMinionRoll {
   toHit: number;
   hit: boolean;
   damage: number;
+  criticalSuccess: boolean;
+  criticalFail: boolean;
 }
 
 export interface IMobDamageInput {
@@ -47,7 +49,9 @@ export function rollAttack({
   return {
     attackRolls,
     hit: attackRoll + toHitMod >= ac,
-    toHit: attackRoll + toHitMod
+    toHit: attackRoll + toHitMod,
+    criticalSuccess: attackRoll === 20,
+    criticalFail: attackRoll === 1,
   };
 }
 
@@ -67,11 +71,11 @@ export function rollMobDamageResults({
       advantage,
       disadvantage
     });
-    const damageRoll = simpleRoll(damageDice, average);
+    const damageRoll = simpleRoll(damageDice, attackRoll.criticalSuccess, average);
     return {
       ...attackRoll,
       damageRolls: damageRoll.rolls,
-      damage: attackRoll.hit ? damageRoll.sum : 0
+      damage: attackRoll.hit ? damageRoll.sum : 0,
     };
   };
   if (mobSize > 500) {

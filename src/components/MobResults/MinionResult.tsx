@@ -6,8 +6,26 @@ import missImage from "../../assets/icons/miss.png";
 import damageImage from "../../assets/icons/damage.png";
 import { RollResult } from "../../roll";
 
-const MinionResultWrapper = styled.tr`
+const MinionResultWrapper = styled.tr.attrs((props: any) => {
+  return {
+    hit: props.hit,
+    criticalSuccess: props.criticalSuccess,
+    criticalFail: props.criticalFail,
+  }
+})`
   font-size: 0.6rem;
+  opacity: ${props => props.hit ? 1 : 0.25};
+  color: ${props => {
+    if (props.criticalSuccess) {
+      return 'green';
+    }
+    if (props.criticalFail) {
+
+      return 'red';
+    }
+    return 'inherit';
+  }};
+  font-weight: ${props => props.criticalSuccess || props.criticalFail ? 700 : 'inherit'};
 
   td {
     padding: 1em 0;
@@ -25,9 +43,9 @@ const RollResult = styled.span`
 `;
 
 const MinionResult = ({ minionRoll }: { minionRoll: IMinionRoll }) => {
-  const { attackRolls, damageRolls, hit, toHit, damage } = minionRoll;
+  const { attackRolls, damageRolls, hit, toHit, damage, criticalSuccess, criticalFail } = minionRoll;
   return (
-    <MinionResultWrapper style={{ opacity: hit ? 1 : 0.25 }}>
+    <MinionResultWrapper hit={hit} criticalSuccess={criticalSuccess} criticalFail={criticalFail}>
       <td>
         <img
           src={hit ? hitImage : missImage}
