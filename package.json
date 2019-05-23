@@ -24,6 +24,10 @@
     "url": "https://github.com/TedChenNZ/dice-roller/issues"
   },
   "homepage": "https://github.com/TedChenNZ/dice-roller#readme",
+  "staticFiles": {
+    "staticPath": "public",
+    "watcherGlob": "**"
+  },
   "devDependencies": {
     "@types/ramda": "0.26.8",
     "@types/react": "16.8.17",
@@ -31,6 +35,7 @@
     "autoprefixer": "9.4.4",
     "gh-pages": "2.0.1",
     "parcel-bundler": "1.12.3",
+    "parcel-plugin-static-files-copy": "2.1.1",
     "postcss-modules": "1.4.1",
     "sass": "1.15.3",
     "typescript": "3.2.2"
